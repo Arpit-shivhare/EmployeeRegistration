@@ -11,7 +11,8 @@ namespace EmployeeRegistration.ViewModels
         [Required]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Enter valid email address")]
+        [Required(ErrorMessage = "Please enter your email address")]
+        [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Please enter correct email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required]

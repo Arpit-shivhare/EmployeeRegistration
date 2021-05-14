@@ -11,8 +11,7 @@ namespace _Services
         void DeleteEmployee(Employee model);
         void InsertEmployee(Employee model);
         void UpdateEmployee(Employee model);
-        IList<Employee> GetAllEmployees();
-        IList<Employee> Search(string employeeName);
+        IList<Employee> GetAllEmployees(string EmployeeName = null);
 
     }
 }

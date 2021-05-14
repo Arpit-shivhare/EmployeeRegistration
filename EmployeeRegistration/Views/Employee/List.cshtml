@@ -1,51 +1,56 @@
-﻿@model IList<EmployeeRegistration.ViewModels.EmployeeModel>
+﻿@model EmployeeRegistration.ViewModels.EmployeeSearchModel
 @{
     ViewData["Title"] = "List";
 }
 
-@if (Model.Count > 0)
-{
-    <label>Search employee name.</label>
-    <form asp-controller="Employee" asp-action="List"></form>
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="employee name" aria-label="Recipient's username" aria-describedby="basic-addon2">
-        <div class="input-group-append">
-            <button class="btn btn-primary" type="button">Search</button>
-        </div>
-    </div>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Mobile Number</th>
-                <th scope="col">Gender</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <th>@item.Id</th>
-                    <th>@item.Name</th>
-                    <td>@item.Email</td>
-                    <td>@item.MobileNo</td>
-                    <td>@item.Gender</td>
-                </tr>
-            }
+<form asp-controller="Employee" asp-action="List" method="post">
 
-        </tbody>
-    </table>
+    @if (Model.Employees.Count > 0)
+    {
 
-}
-else
-{
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h3>There is not data to show.</h3>
+        <label>Search Employee Name.</label>
+        <div class="input-group mb-3">
+            <input asp-for="EmployeeName" type="text" class="form-control" placeholder="Employee Name" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Search</button>
             </div>
         </div>
-    </div>
-}
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                   
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Mobile Number</th>
+                    <th scope="col">Gender</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Employees)
+                {
+                    <tr>
+                        
+                        <th>@item.Name</th>
+                        <td>@item.Email</td>
+                        <td>@item.MobileNo</td>
+                        <td>@item.Gender</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    }
+    else
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>There is not data to show.</h3>
+                </div>
+            </div>
+        </div>
+    }
+</form>
+

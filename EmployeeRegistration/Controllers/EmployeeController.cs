@@ -19,18 +19,23 @@ namespace EmployeeRegistration.Controllers
         #region ctor
         public EmployeeController(IEmployeeService employeeService)
         {
-            _employeeService = employeeService;
+           _employeeService = employeeService;
         }
 
         #endregion
 
 
         #region methods
+
+        #region index
         public IActionResult Index()
         {
             return View();
         }
 
+        #endregion
+
+        #region create
         public IActionResult Create()
         {
             return View();
@@ -54,50 +59,67 @@ namespace EmployeeRegistration.Controllers
             }
             return View();
         }
+        #endregion
 
-        public IActionResult List(string employeeName = null)
+
+
+        #region list
+        public IActionResult List()
         {
-            var model = new List<EmployeeModel>();
+            var model = new EmployeeSearchModel();
 
             var data = _employeeService.GetAllEmployees();
 
-            if (!(string.IsNullOrEmpty(employeeName)))
+            if (data.Count > 0)
             {
-                var employee = data.Where(e => e.Name.Contains(employeeName)).ToList();
-
-                if(employee.Count > 0)
+                foreach (var item in data)
                 {
-                    foreach(var item in employee)
+                    var employeeData = new EmployeeModel
                     {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Email = item.Email,
+                        MobileNo = item.MobileNo,
+                        Gender = (EmployeeRegistration.ViewModels.GenderType)item.Gender,
+                        Address = item.Address
+                    };
 
-                    }
+                    model.Employees.Add(employeeData);
                 }
             }
-            else
+
+           return View(model);
+        }
+        #endregion
+
+
+        #region searchEmployee
+        [HttpPost]
+        public IActionResult List(EmployeeSearchModel model)
+        {
+            var data = _employeeService.GetAllEmployees(model.EmployeeName);
+
+            if (data.Count > 0)
             {
-                if (data.Count > 0)
+                foreach (var item in data)
                 {
-                    foreach (var item in data)
+                    var employeeData = new EmployeeModel
                     {
-                        var employeeData = new EmployeeModel
-                        {
-                            Id = item.Id,
-                            Name = item.Name,
-                            Email = item.Email,
-                            MobileNo = item.MobileNo,
-                            Gender = (EmployeeRegistration.ViewModels.GenderType)item.Gender,
-                            Address = item.Address
-                        };
+                        Id = item.Id,
+                        Name = item.Name,
+                        Email = item.Email,
+                        MobileNo = item.MobileNo,
+                        Gender = (EmployeeRegistration.ViewModels.GenderType)item.Gender,
+                        Address = item.Address
+                    };
 
-                        model.Add(employeeData);
-                    }
+                    model.Employees.Add(employeeData);
                 }
-
             }
-
 
             return View(model);
         }
+        #endregion
 
         #endregion
     }

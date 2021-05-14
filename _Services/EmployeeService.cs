@@ -26,6 +26,8 @@ namespace _Services
 
 
         #region methods
+
+        #region delete
         public void DeleteEmployee(Employee model)
         {
             if (model == null)
@@ -33,16 +35,23 @@ namespace _Services
 
             _repository.Delete(model);
         }
+        #endregion
 
-        public IList<Employee> GetAllEmployees()
+        #region get
+        public IList<Employee> GetAllEmployees(string EmployeeName)
         {
-            var query = from emp in _repository.Table
-                        orderby emp.Name
-                        select emp;
-            var EmpList = query.ToList();
-            return EmpList;
+            var query = _repository.Table;
+                       
+            if (!string.IsNullOrEmpty(EmployeeName))
+            {
+                query = query.Where(e => e.Name.Contains(EmployeeName));
+            }
+            return query.OrderBy(e => e.Name).ToList();
         }
+        #endregion
 
+
+        #region insert
         public void InsertEmployee(Employee model)
         {
             if (model == null)
@@ -50,21 +59,9 @@ namespace _Services
 
             _repository.Insert(model);
         }
+        #endregion
 
-        public IList<Employee> Search(string employeeName)
-        {
-            if (string.IsNullOrEmpty(employeeName))
-            {
-                var query = from emp in _repository.Table
-                            orderby emp.Name
-                            select emp;
-                var EmpList = query.ToList();
-                return EmpList;
-            }
-
-            return _repository.Table.Where(e => e.Name.Contains(employeeName)).ToList();
-        }
-
+        #region update
         public void UpdateEmployee(Employee model)
         {
             if (model == null)
@@ -72,6 +69,8 @@ namespace _Services
 
            _repository.Update(model);
         }
+
+        #endregion
 
         #endregion
     }
